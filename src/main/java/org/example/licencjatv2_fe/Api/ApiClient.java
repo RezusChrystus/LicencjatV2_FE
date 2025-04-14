@@ -34,7 +34,6 @@ public class ApiClient {
             return "Błąd połączenia: HTTP " + response.statusCode();
         }
     }
-
     public static String register(String login, String password) throws IOException, InterruptedException {
         String url = BASE_URL + "register";
 

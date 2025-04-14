@@ -14,6 +14,8 @@ module org.example.licencjatv2_fe {
     exports org.example.licencjatv2_fe.Api;
     opens org.example.licencjatv2_fe.Api to javafx.fxml;
     exports org.example.licencjatv2_fe.UserWindow;
+    opens org.example.licencjatv2_fe.UserWindow to javafx.fxml;
+
 
 
 }
