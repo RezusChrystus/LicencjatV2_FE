@@ -41,6 +41,8 @@ public class EntryController {
     @FXML
     private MenuItem helpMenuItem = new MenuItem();
 
+
+
     @FXML
     protected void onLoginMenuItemClicked() {
         System.out.println("Login Menu Item Clicked!");

@@ -115,6 +115,55 @@ public class ApiClient {
         }
         return null;  // Zwróć null w przypadku braku odpowiedzi
     }
+    public static Workspace createWorkspace(String workspaceName) throws IOException, InterruptedException {
+        String url = BASE_URL + "createWorkspace";
+
+        String formData = "workspaceName=" + URLEncoder.encode(workspaceName, StandardCharsets.UTF_8);
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .POST(HttpRequest.BodyPublishers.ofString(formData))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 201) {
+            return dtoService.workspaceMapping(response.body());
+        } else {
+            return null;
+        }
+    }
+    public static Workspace createAndAddWorkspaceToUser(String login, String password, String workspaceName) throws IOException, InterruptedException {
+        String url = BASE_URL + "addWorkspace2";
+
+        String formData = "login=" + URLEncoder.encode(login, StandardCharsets.UTF_8) +
+                "&password=" + URLEncoder.encode(password, StandardCharsets.UTF_8) +
+                "&name=" + URLEncoder.encode(workspaceName, StandardCharsets.UTF_8);
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .POST(HttpRequest.BodyPublishers.ofString(formData))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        System.out.println("Create and Add Workspace - response: " + response.body());
+
+        if (response.statusCode() == 200 && response.body().contains("successfully")) {
+            Workspace temp = new Workspace();
+            temp.setName(workspaceName);
+            temp.setTag(workspaceName); // jeśli tag == name
+            return temp;
+        } else {
+            return null;
+        }
+    }
+
+
 
 
 

@@ -16,7 +16,7 @@
     </padding>
    <children>
       <TextField fx:id="loginTextField" layoutX="139.0" layoutY="93.0" text="user1" />
-      <TextField fx:id="passwordTextField" layoutX="139.0" layoutY="132.0" text="hashed_password_1" />
+      <TextField fx:id="passwordTextField" layoutX="139.0" layoutY="132.0" text="hashed_password_1"   />
       <Text layoutX="85.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login" />
       <Text layoutX="74.0" layoutY="149.0" strokeType="OUTSIDE" strokeWidth="0.0" text="password" />
       <Label fx:id="alertLabel" layoutX="122.0" layoutY="68.0" prefHeight="17.0" prefWidth="170.0" />
