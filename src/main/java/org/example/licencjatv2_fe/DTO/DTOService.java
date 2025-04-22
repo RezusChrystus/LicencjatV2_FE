@@ -34,6 +34,7 @@ public class DTOService {
     }
 
     public Workspace workspaceMapping(String workspaceInfo) {
+        System.out.println("Otrzymana odpowiedź do mapowania: " + workspaceInfo);
         JSONObject workspaceJson = new JSONObject(workspaceInfo);
         Workspace workspace = new Workspace();
         workspace.setId(workspaceJson.getLong("id"));
@@ -48,6 +49,8 @@ public class DTOService {
         workspace.setTaskList(taskList);
         return workspace;
     }
+
+
 
     public Task taskMapping(String taskInfo) {
         JSONObject taskJson = new JSONObject(taskInfo);
