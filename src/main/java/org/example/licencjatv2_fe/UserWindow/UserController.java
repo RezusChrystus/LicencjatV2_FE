@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import org.example.licencjatv2_fe.Api.ApiClient;
 import org.example.licencjatv2_fe.Classes.User;
 import org.example.licencjatv2_fe.Classes.Workspace;
+import org.example.licencjatv2_fe.WorkspaceWindow.WorkspaceController;
 
 import java.io.IOException;
 
@@ -36,26 +37,45 @@ public class UserController {
     public void setUser(User user) {
         this.user = user;
 
-        // Wypełnianie siatki nazwami workspaces
+        // Dodaj wszystkie workspace'y jako przyciski w TilePane
         for (Workspace workspace : user.getWorkspaceList()) {
-            Button workspaceButton = new Button(workspace.getName());
-            workspaceButton.setMinWidth(100);
-            workspaceButton.setMinHeight(60);
-            // można dodać tutaj akcję po kliknięciu
-            workspaceTilePane.getChildren().add(workspaceButton);
-
+            workspaceTilePane.getChildren().add(createWorkspaceButton(workspace));
         }
     }
+
+    private Button createWorkspaceButton(Workspace workspace) {
+        Button button = new Button(workspace.getName());
+        button.setMinWidth(100);
+        button.setMinHeight(60);
+        button.setOnAction(e -> openWorkspaceWindow(user, workspace));
+        return button;
+    }
+
+    private void openWorkspaceWindow(User user, Workspace workspace) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/licencjatv2_fe/workspace-window-view.fxml"));
+            Parent root = loader.load();
+
+            WorkspaceController controller = loader.getController();
+            controller.initData(user, workspace);
+
+            Stage stage = new Stage();
+            stage.setTitle("Workspace: " + workspace.getName());
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     private void onLogoutButtonClick() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/licencjatv2_fe/entry-view.fxml"));
             Parent root = loader.load();
-
             Stage stage = (Stage) logoutButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Błąd", "Nie można przeładować ekranu logowania.", Alert.AlertType.ERROR);
@@ -65,7 +85,6 @@ public class UserController {
     @FXML
     private void onCreateWorkspaceButtonClick() {
         String workspaceName = workspaceNameTextField.getText().trim();
-
         if (workspaceName.isEmpty()) {
             showAlert("Błąd", "Nazwa workspace nie może być pusta.", Alert.AlertType.ERROR);
             return;
@@ -73,22 +92,14 @@ public class UserController {
 
         new Thread(() -> {
             try {
-                Workspace newWorkspace = ApiClient.createAndAddWorkspaceToUser(
-                        user.getLogin(), user.getPassword(), workspaceName
-                );
-
+                Workspace newWorkspace = ApiClient.createAndAddWorkspaceToUser(user.getLogin(), user.getPassword(), workspaceName);
                 if (newWorkspace != null) {
                     user.getWorkspaceList().add(newWorkspace);
-
                     Platform.runLater(() -> {
-                        Button workspaceButton = new Button(newWorkspace.getName());
-                        workspaceButton.setMinWidth(100);
-                        workspaceButton.setMinHeight(60);
-                        workspaceTilePane.getChildren().add(workspaceButton);
-                        showAlert("Sukces", "Workspace utworzony i dodany!", Alert.AlertType.INFORMATION);
+                        workspaceTilePane.getChildren().add(createWorkspaceButton(newWorkspace));
                         workspaceNameTextField.clear();
+                        showAlert("Sukces", "Workspace utworzony i dodany!", Alert.AlertType.INFORMATION);
                     });
-
                 } else {
                     Platform.runLater(() -> showAlert("Błąd", "Nie udało się utworzyć workspace.", Alert.AlertType.ERROR));
                 }
@@ -99,14 +110,11 @@ public class UserController {
         }).start();
     }
 
-
-
     @FXML
     private void onAddWorkspaceButtonClick() {
         String tag = workspaceTagTextField.getText().trim();
-
         if (tag.isEmpty()) {
-            showAlert("Error", "Tag field cannot be empty.", Alert.AlertType.ERROR);
+            showAlert("Błąd", "Pole tag nie może być puste.", Alert.AlertType.ERROR);
             return;
         }
 
@@ -114,42 +122,29 @@ public class UserController {
                 .anyMatch(w -> w.getTag().equalsIgnoreCase(tag));
 
         if (alreadyExists) {
-            showAlert("Info", "Workspace already added.", Alert.AlertType.INFORMATION);
+            showAlert("Info", "Workspace już dodany.", Alert.AlertType.INFORMATION);
             return;
         }
 
-        // Operacja sieciowa w osobnym wątku
         new Thread(() -> {
             try {
                 Workspace newWorkspace = ApiClient.addWorkspaceToUser(user.getLogin(), user.getPassword(), tag);
-
                 if (newWorkspace != null) {
-                    // Dodajemy nowy workspace do listy
                     user.getWorkspaceList().add(newWorkspace);
-
                     Platform.runLater(() -> {
-                        // Tworzymy kafelek z nazwą workspace
-                        Button workspaceButton = new Button(newWorkspace.getName());  // Używamy name z obiektu Workspace
-                        workspaceButton.setMinWidth(100);
-                        workspaceButton.setMinHeight(60);
-                        workspaceTilePane.getChildren().add(workspaceButton);
-                        showAlert("Succes", "Workspace added succesfuly!", Alert.AlertType.INFORMATION);
+                        workspaceTilePane.getChildren().add(createWorkspaceButton(newWorkspace));
                         workspaceTagTextField.clear();
+                        showAlert("Sukces", "Workspace dodany pomyślnie!", Alert.AlertType.INFORMATION);
                     });
-
                 } else {
-                    Platform.runLater(() -> showAlert("Failure", "Workspace not found.", Alert.AlertType.ERROR));
+                    Platform.runLater(() -> showAlert("Błąd", "Nie znaleziono workspace o podanym tagu.", Alert.AlertType.ERROR));
                 }
-
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
-                Platform.runLater(() -> showAlert("Error", "Could not connect with server.", Alert.AlertType.ERROR));
+                Platform.runLater(() -> showAlert("Błąd", "Brak połączenia z serwerem.", Alert.AlertType.ERROR));
             }
         }).start();
-
     }
-
-
 
     private void showAlert(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);

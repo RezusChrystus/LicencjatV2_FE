@@ -15,6 +15,9 @@ module org.example.licencjatv2_fe {
     opens org.example.licencjatv2_fe.Api to javafx.fxml;
     exports org.example.licencjatv2_fe.UserWindow;
     opens org.example.licencjatv2_fe.UserWindow to javafx.fxml;
+    exports org.example.licencjatv2_fe.WorkspaceWindow; // Eksportuj tylko ten pakiet
+
+    opens org.example.licencjatv2_fe.WorkspaceWindow to javafx.fxml; // Otwórz pakiet dla javafx.fxml
 
 
 
