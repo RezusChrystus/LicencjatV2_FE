@@ -59,7 +59,7 @@ public class DTOService {
         task.setContent(taskJson.getString("content"));
         task.setState(State.valueOf(taskJson.getString("state").toUpperCase().replace(" ", "_")));
         task.setDeadline(LocalDate.parse(taskJson.getString("deadline"), dateFormatter));
-        task.setCreatedAt(LocalDate.parse(taskJson.getString("created_at"), dateFormatter));
+        task.setCreatedAt(LocalDate.parse(taskJson.getString("createdAt"), dateFormatter));
         return task;
     }
 }
