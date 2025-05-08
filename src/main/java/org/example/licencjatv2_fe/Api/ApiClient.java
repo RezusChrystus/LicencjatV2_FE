@@ -1,5 +1,6 @@
 package org.example.licencjatv2_fe.Api;
 
+import org.example.licencjatv2_fe.Classes.Task;
 import org.example.licencjatv2_fe.Classes.Workspace;
 import org.example.licencjatv2_fe.DTO.DTOService;
 
@@ -89,4 +90,56 @@ public class ApiClient {
         }
         return null;
     }
+    public static String addTaskToWorkspace(String workspaceTag, String content, String deadline, String state) throws IOException, InterruptedException {
+        String json = """
+        {
+            "content": "%s",
+            "createdAt": "%s",
+            "state": "%s",
+            "deadline": "%s"
+        }
+        """.formatted(content, java.time.LocalDate.now(), state, deadline);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "workspaces/" + encode(workspaceTag) + "/tasks"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200 || response.statusCode() == 201) {
+            return response.body();
+        } else {
+            System.out.println("Błąd dodawania taska: HTTP " + response.statusCode() + " - " + response.body());
+            return null;
+        }
+    }
+    public static void updateTask(Task task) {
+        try {
+            String json = """
+            {
+                "id": %d,
+                "content": "%s",
+                "deadline": "%s",
+                "state": "%s"
+            }
+            """.formatted(task.getId(), task.getContent(), task.getDeadline(), task.getState());
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "workspaces/tasks/" + task.getId()))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Update Task response: " + response.body());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
