@@ -8,7 +8,7 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.licencjatv2_fe.UserWindow.UserController">
     <children>
-        <Label layoutX="20.0" layoutY="20.0" text="Twoje Workspaces" />
+        <Label fx:id="UserNameLabel" layoutX="20.0" layoutY="20.0" text="Twoje Workspaces" />
         <TilePane fx:id="workspaceTilePane" hgap="15" layoutX="20.0" layoutY="98.0" prefColumns="5" prefHeight="587.0" prefWidth="667.0" vgap="15" />
       <Button fx:id="addWorkspaceButton" layoutX="565.0" layoutY="25.0" mnemonicParsing="false" onAction="#onAddWorkspaceButtonClick" text="Add Workspace" />
       <TextField fx:id="workspaceTagTextField" layoutX="343.0" layoutY="25.0" prefHeight="25.0" prefWidth="222.0" promptText="Workspace Tag" />

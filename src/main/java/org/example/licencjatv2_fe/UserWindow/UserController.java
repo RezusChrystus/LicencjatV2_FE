@@ -7,12 +7,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import org.example.licencjatv2_fe.Api.ApiClient;
 import org.example.licencjatv2_fe.Classes.User;
 import org.example.licencjatv2_fe.Classes.Workspace;
+import org.example.licencjatv2_fe.DTO.DTOService;
 import org.example.licencjatv2_fe.WorkspaceWindow.WorkspaceController;
 
 import java.io.IOException;
@@ -31,17 +33,21 @@ public class UserController {
     private Button createWorkspaceButton;
     @FXML
     private Button logoutButton;
+    @FXML
+    private Label UserNameLabel;
 
     private User user;
 
     public void setUser(User user) {
         this.user = user;
+        UserNameLabel.setText(user.getLogin());
 
         // Dodaj wszystkie workspace'y jako przyciski w TilePane
         for (Workspace workspace : user.getWorkspaceList()) {
             workspaceTilePane.getChildren().add(createWorkspaceButton(workspace));
         }
     }
+
 
     private Button createWorkspaceButton(Workspace workspace) {
         Button button = new Button(workspace.getName());
@@ -62,6 +68,7 @@ public class UserController {
             Stage stage = new Stage();
             stage.setTitle("Workspace: " + workspace.getName());
             stage.setScene(new Scene(root));
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,9 +101,8 @@ public class UserController {
             try {
                 Workspace newWorkspace = ApiClient.createAndAddWorkspaceToUser(user.getLogin(), user.getPassword(), workspaceName);
                 if (newWorkspace != null) {
-                    user.getWorkspaceList().add(newWorkspace);
+                    reloadUserWorkspacesAndUI();
                     Platform.runLater(() -> {
-                        workspaceTilePane.getChildren().add(createWorkspaceButton(newWorkspace));
                         workspaceNameTextField.clear();
                         showAlert("Sukces", "Workspace utworzony i dodany!", Alert.AlertType.INFORMATION);
                     });
@@ -130,9 +136,8 @@ public class UserController {
             try {
                 Workspace newWorkspace = ApiClient.addWorkspaceToUser(user.getLogin(), user.getPassword(), tag);
                 if (newWorkspace != null) {
-                    user.getWorkspaceList().add(newWorkspace);
+                    reloadUserWorkspacesAndUI();
                     Platform.runLater(() -> {
-                        workspaceTilePane.getChildren().add(createWorkspaceButton(newWorkspace));
                         workspaceTagTextField.clear();
                         showAlert("Sukces", "Workspace dodany pomyślnie!", Alert.AlertType.INFORMATION);
                     });
@@ -145,6 +150,27 @@ public class UserController {
             }
         }).start();
     }
+    private void reloadUserWorkspacesAndUI() {
+        try {
+            DTOService dtoService = new DTOService();
+            User updatedUser = dtoService.userMapping(ApiClient.login(user.getLogin(), user.getPassword()));
+            user.setWorkspaceList(updatedUser.getWorkspaceList());
+
+            Platform.runLater(() -> {
+                workspaceTilePane.getChildren().clear();
+                for (Workspace workspace : user.getWorkspaceList()) {
+                    workspaceTilePane.getChildren().add(createWorkspaceButton(workspace));
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Platform.runLater(() -> showAlert("Błąd", "Nie udało się przeładować workspace'ów.", Alert.AlertType.ERROR));
+        }
+    }
+
+
+
+
 
     private void showAlert(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);

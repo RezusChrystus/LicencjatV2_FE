@@ -17,6 +17,9 @@ import org.example.licencjatv2_fe.Classes.Workspace;
 import org.example.licencjatv2_fe.DTO.DTOService;
 import org.example.licencjatv2_fe.TaskWindow.TaskController;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 
 public class WorkspaceController {
@@ -35,6 +38,9 @@ public class WorkspaceController {
     private ListView<String> completedListView;
     @FXML
     private Button addTaskButton;
+    @FXML
+    private Label workspaceTag;
+
     Workspace workspace;
     User user;
 
@@ -43,7 +49,7 @@ public class WorkspaceController {
         this.workspace = workspace;
         usernameLabel.setText("Logged in as: " + user.getLogin());
         workspaceNameLabel.setText("Workspace: " + workspace.getName());
-
+        workspaceTag.setText(workspace.getTag());
         refreshTaskLists();
         setupClickListeners();
     }
@@ -105,6 +111,14 @@ public class WorkspaceController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    @FXML
+    protected void workspaceTagClicked(){
+        copyToClipboard( workspaceTag.getText());
+    }
+    private void copyToClipboard(String str) {
+        StringSelection selection = new StringSelection(str);
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
     }
 
     private void setupClickListeners() {

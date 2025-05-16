@@ -7,6 +7,7 @@ module org.example.licencjatv2_fe {
     requires jdk.jsobject;
     requires org.json;
     requires static lombok;
+    requires java.desktop;
 
     opens org.example.licencjatv2_fe to javafx.fxml;
     exports org.example.licencjatv2_fe.EntryWindow;
