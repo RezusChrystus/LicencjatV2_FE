@@ -10,13 +10,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.PasswordField?>
 <AnchorPane prefHeight="314.0" prefWidth="426.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.licencjatv2_fe.EntryWindow.EntryController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
    <children>
       <TextField fx:id="loginTextField" layoutX="139.0" layoutY="93.0" text="user1" />
-      <TextField fx:id="passwordTextField" layoutX="139.0" layoutY="132.0" text="hashed_password_1"   />
+      <PasswordField fx:id="passwordTextField" layoutX="139.0" layoutY="132.0" text="hashed_password_1"   />
       <Text layoutX="85.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login" />
       <Text layoutX="74.0" layoutY="149.0" strokeType="OUTSIDE" strokeWidth="0.0" text="password" />
       <Label fx:id="alertLabel" layoutX="122.0" layoutY="68.0" prefHeight="17.0" prefWidth="170.0" />
@@ -34,6 +35,6 @@
         </menus>
       </MenuBar>
       <Label fx:id="confirmPasswordLabel" layoutX="27.0" layoutY="166.0" text="confirm password" visible="false" />
-      <TextField fx:id="confirmPasswordTextField" layoutX="139.0" layoutY="171.0" visible="false" />
+      <PasswordField fx:id="confirmPasswordTextField" layoutX="139.0" layoutY="171.0" visible="false" />
    </children>
 </AnchorPane>

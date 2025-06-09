@@ -4,10 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.example.licencjatv2_fe.Api.ApiClient;
 import org.example.licencjatv2_fe.Classes.User;
@@ -23,7 +20,7 @@ public class EntryController {
     @FXML
     private TextField loginTextField;
     @FXML
-    private TextField passwordTextField;
+    private PasswordField passwordTextField;
     @FXML
     private TextField confirmPasswordTextField = new TextField();
     @FXML
