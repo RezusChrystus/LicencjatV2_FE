@@ -10,8 +10,10 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.licencjatv2_fe.Api.ApiClient;
+import org.example.licencjatv2_fe.Classes.User;
 import org.example.licencjatv2_fe.DTO.DTOService;
 import org.example.licencjatv2_fe.UserWindow.UserAplication;
+import org.example.licencjatv2_fe.UserWindow.UserController;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -38,6 +40,8 @@ public class EntryController {
     private MenuItem closeMenuItem = new MenuItem();
     @FXML
     private MenuItem helpMenuItem = new MenuItem();
+
+
 
     @FXML
     protected void onLoginMenuItemClicked() {
@@ -79,27 +83,12 @@ public class EntryController {
             } else {
 //                System.out.println(response);
                 alertLabel.setText("");
+                User user = dtoService.userMapping(response);
+
                 System.out.println(dtoService.userMapping(response));
-//
-
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/licencjatv2_fe/user-window-view.fxml"));
-                Parent root = fxmlLoader.load();
-
-
-// Jeśli chcesz przekazać dane użytkownika do kontrolera:
-// UserController userController = fxmlLoader.getController();
-// userController.setUser(...);
-
-                Stage stage = new Stage();
-                stage.setTitle("User Dashboard");
-                stage.setScene(new Scene(root));
-                stage.show();
-
-// Zamknięcie obecnego okna
+                UserAplication.startUserWindow(user); // 🔄 Nowe miejsce
                 Stage currentStage = (Stage) loginButton.getScene().getWindow();
                 currentStage.close();
-
-                //
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -108,6 +97,7 @@ public class EntryController {
         }
         return new String[]{login, password};
     }
+
 
     private String[] onRegisterButtonClicked() {
         String login;

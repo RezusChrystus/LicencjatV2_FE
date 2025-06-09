@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="412.0" prefWidth="613.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.licencjatv2_fe.WorkspaceWindow.WorkspaceController">
+    <children>
+        <Label fx:id="usernameLabel" layoutX="20" layoutY="20" />
+        <Label fx:id="workspaceNameLabel" layoutX="20" layoutY="50" />
+        <Label layoutX="20" layoutY="70" text="Pending" />
+        <Label layoutX="220" layoutY="70" text="In Progress" />
+        <Label layoutX="420" layoutY="70" text="Completed" />
+
+        <ListView fx:id="pendingListView" layoutX="20" layoutY="90" prefHeight="300" prefWidth="180" />
+        <ListView fx:id="inProgressListView" layoutX="220" layoutY="90" prefHeight="300" prefWidth="180" />
+        <ListView fx:id="completedListView" layoutX="420" layoutY="90" prefHeight="300" prefWidth="180" />
+      <Button fx:id="addTaskButton" layoutX="521.0" layoutY="38.0" mnemonicParsing="false" onAction="#onAddTaskButtonClick" text="Add Task" />
+      <Label fx:id="workspaceTag" layoutX="200.0" layoutY="50.0" onMouseClicked="#workspaceTagClicked" prefHeight="17.0" prefWidth="180.0" text="Label" />    </children>
+</AnchorPane>

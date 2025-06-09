@@ -7,6 +7,7 @@ module org.example.licencjatv2_fe {
     requires jdk.jsobject;
     requires org.json;
     requires static lombok;
+    requires java.desktop;
 
     opens org.example.licencjatv2_fe to javafx.fxml;
     exports org.example.licencjatv2_fe.EntryWindow;
@@ -14,6 +15,11 @@ module org.example.licencjatv2_fe {
     exports org.example.licencjatv2_fe.Api;
     opens org.example.licencjatv2_fe.Api to javafx.fxml;
     exports org.example.licencjatv2_fe.UserWindow;
+    opens org.example.licencjatv2_fe.UserWindow to javafx.fxml;
+    exports org.example.licencjatv2_fe.WorkspaceWindow; // Eksportuj tylko ten pakiet
+    opens org.example.licencjatv2_fe.WorkspaceWindow to javafx.fxml; // Otwórz pakiet dla javafx.fxml
+    opens org.example.licencjatv2_fe.TaskWindow to javafx.fxml;
+    exports org.example.licencjatv2_fe.TaskWindow;
 
 
 }

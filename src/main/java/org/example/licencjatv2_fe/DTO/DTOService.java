@@ -34,6 +34,7 @@ public class DTOService {
     }
 
     public Workspace workspaceMapping(String workspaceInfo) {
+        System.out.println("Otrzymana odpowiedź do mapowania: " + workspaceInfo);
         JSONObject workspaceJson = new JSONObject(workspaceInfo);
         Workspace workspace = new Workspace();
         workspace.setId(workspaceJson.getLong("id"));
@@ -49,6 +50,8 @@ public class DTOService {
         return workspace;
     }
 
+
+
     public Task taskMapping(String taskInfo) {
         JSONObject taskJson = new JSONObject(taskInfo);
         Task task = new Task();
@@ -56,7 +59,7 @@ public class DTOService {
         task.setContent(taskJson.getString("content"));
         task.setState(State.valueOf(taskJson.getString("state").toUpperCase().replace(" ", "_")));
         task.setDeadline(LocalDate.parse(taskJson.getString("deadline"), dateFormatter));
-        task.setCreatedAt(LocalDate.parse(taskJson.getString("created_at"), dateFormatter));
+        task.setCreatedAt(LocalDate.parse(taskJson.getString("createdAt"), dateFormatter));
         return task;
     }
 }
